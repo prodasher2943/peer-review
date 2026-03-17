@@ -15,3 +15,4 @@ export const middleware = clerkMiddleware(async (auth, request) => {
 export const config = {
     matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
 }
+// 3B56YInc37WnspUrZVb0897V1nk_4F8wZQZELmeDjtuwbd3uK
