@@ -1,7 +1,7 @@
 import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { WebhookEvent } from '@clerk/nextjs/server'
-import { getSupabase } from '@/app/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
 
 export async function POST(req: Request) {
     const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET
@@ -34,12 +34,14 @@ export async function POST(req: Request) {
         console.error('Webhook verification failed:', err)
         return new Response('Invalid webhook', { status: 400 })
     }
-
+    const supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
     if (evt.type === 'user.created') {
         const { id, email_addresses } = evt.data
         const email = email_addresses[0]?.email_address
 
-        const supabase = getSupabase()
         const { error } = await supabase.from('users').insert({
             id,
             email,
